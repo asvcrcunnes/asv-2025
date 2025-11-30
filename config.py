@@ -5,8 +5,13 @@
 MAVLINK_CONNECTION = 'COM3'         # Windows (untuk testing)
 MAVLINK_BAUD = 115200
 
-# --- KAMERA & MODEL ---
-CAMERA_INDEX = 0
+# --- KAMERA ---
+# Pastikan Anda tahu ID masing-masing kamera di RPi (/dev/video0, 1, 2)
+CAM_NAV_INDEX = 0        # Kamera Utama (Deteksi Bola/Kotak)
+CAM_SURFACE_INDEX = 1    # Kamera Atas (Foto Mangrove)
+CAM_UNDERWATER_INDEX = 2 # Kamera Bawah (Foto Ikan)
+
+# --- MODEL ---
 MODEL_PATH = "models/best.onnx"
 INPUT_SIZE = 320  # Ukuran training model Anda
 
