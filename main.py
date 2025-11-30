@@ -69,8 +69,14 @@ def calculate_steering(detections, frame_center_x):
 def main():
     # 1. Inisialisasi Modul
     mav = MavlinkInterface(config.MAVLINK_CONNECTION, config.MAVLINK_BAUD)
+    
     web = WebPublisher(config.FIREBASE_KEY_PATH, config.FIREBASE_DB_URL, config.FIREBASE_NODE, config.CLOUDINARY_CONFIG)
-    cam = CameraStream(config.CAMERA_INDEX).start()
+    print("[Main] Opening cameras...")
+    
+    cam_nav = CameraStream(config.CAM_NAV_INDEX, name="Nav Cam").start()
+    # cam_surface = CameraStream(config.CAM_SURFACE_INDEX, name="Surface Cam").start()
+    # cam_underwater = CameraStream(config.CAM_UNDERWATER_INDEX, name="Underwater Cam").start()
+    
     detector = YOLO_ONNX(config.MODEL_PATH, input_size=config.INPUT_SIZE)
 
     # Start Threads
@@ -89,7 +95,7 @@ def main():
     try:
         while True:
             # 1. Ambil Data
-            frame = cam.read()
+            frame = cam_nav.read()
             telemetry = mav.get_state()
             
             if frame is None: continue
@@ -200,7 +206,7 @@ def main():
     except KeyboardInterrupt:
         print("[Main] Stopping...")
     finally:
-        cam.stop()
+        cam_nav.stop()
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
